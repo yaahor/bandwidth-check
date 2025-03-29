@@ -1,4 +1,4 @@
-export enum Bandwidth {
+export enum MediaQuality {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',

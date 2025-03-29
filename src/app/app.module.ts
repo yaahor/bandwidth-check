@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { CameraModule } from '../features/camera/camera.module';
 import { SpinnerModule } from '../widgets/spinner/spinner.module';
 
 import { AppComponent } from './app.component';
@@ -10,7 +11,8 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    SpinnerModule
+    SpinnerModule,
+    CameraModule
   ],
   providers: [],
   bootstrap: [AppComponent]

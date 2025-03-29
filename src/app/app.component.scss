@@ -1,0 +1,18 @@
+.app, :host {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 40px;
+  padding: 40px;
+  height: 100%; // todo ?scroll on small devices
+}
+
+.app__card {
+  background-color: #FFFFFF0F;
+}
+
+.app__card_records {
+}
+
+.app__card_video {
+}

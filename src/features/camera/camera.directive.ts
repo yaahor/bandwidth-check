@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { MediaQuality } from './model/media-quality';
 import { VideoCamera } from './model/video-camera';
-import { VideoRecord } from './model/video-record';
 
 @Directive({
   selector: 'video[appCamera]',
@@ -17,7 +16,7 @@ import { VideoRecord } from './model/video-record';
 })
 export class CameraDirective implements OnInit, OnDestroy {
   @Input() quality: MediaQuality = MediaQuality.MEDIUM;
-  @Output() videoRecorded = new EventEmitter<VideoRecord>(true);
+  @Output() videoRecorded = new EventEmitter<Blob>();
 
   get isRecording(): boolean {
     return this.camera?.isRecording ?? false;
@@ -35,7 +34,7 @@ export class CameraDirective implements OnInit, OnDestroy {
 
     this.camera.setOnVideoRecorded((blob) => {
       this.ngZone.run(() => {
-        this.videoRecorded.emit({ blob, timestamp: Date.now() });
+        this.videoRecorded.emit(blob);
       })
     });
 

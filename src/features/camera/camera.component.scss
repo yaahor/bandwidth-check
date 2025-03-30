@@ -28,26 +28,34 @@ $control-group--size: 80px;
   width: 100%;
 }
 
-//region .app-camera-control-group
-.app-camera-control-group {
+//region .app-camera-control-mat
+.app-camera-control-mat {
   $blur: blur(10px);
-
-  align-items: center;
   -webkit-backdrop-filter: $blur;
   backdrop-filter: $blur;
   background-color: #00000099;
+  overflow: hidden;
+}
+
+.app-camera-control-mat_left {
   border-radius: math.div($control-group--size, 2);
-  border-width: 0;
+  height: $control-group--size;
+  width: $control-group--size;
+}
+
+.app-camera-control-mat_middle {
+  align-items: center;
+  border-radius: math.div($control-group--size, 2);
   display: flex;
   gap: 16px;
   height: $control-group--size;
   justify-content: center;
-  min-width: $control-group--size;
-  overflow: hidden;
+  width: 300px;
 }
 
-.app-camera-control-group_middle {
-  width: 300px;
+.app-camera-control-mat_overlay {
+  border-radius: 8px;
+  width: 280px;
 }
 
 //endregion
@@ -137,7 +145,6 @@ $control-group--size: 80px;
 
 .app-camera-progress__value {
   color: white;
-  font-family: Lato;
   font-size: 1rem;
   font-weight: 900;
   left: 50%;
@@ -145,5 +152,37 @@ $control-group--size: 80px;
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
+}
+
+//endregion
+
+
+//region .app-camera-quality-option
+$option--color: #fff;
+
+.app-camera-quality-option {
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: rgba($option--color, 0.6);
+  cursor: pointer;
+  font-size: 20px;
+  padding: 12px 16px;
+  text-align: left;
+  transition: all 0.2s ease;
+  display: block;
+
+  &:hover {
+    color: $option--color;
+  }
+}
+
+.app-camera-quality-option_selected {
+  color: $option--color;
+  font-weight: 900;
+}
+
+.app-camera-quality-option__resolution {
+  font-weight: 700;
 }
 //endregion

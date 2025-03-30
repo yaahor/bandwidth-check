@@ -1,3 +1,4 @@
+import { CdkConnectedOverlay, CdkOverlayOrigin, OverlayModule } from '@angular/cdk/overlay';
 import { NgModule } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { CameraComponent } from './camera.component';
@@ -11,7 +12,8 @@ import { CameraComponent } from './camera.component';
   ],
   imports: [
     CommonModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    OverlayModule,
   ]
 })
 export class CameraModule { }

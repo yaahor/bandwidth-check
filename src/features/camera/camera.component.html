@@ -1,10 +1,13 @@
 <video class="app-camera__video" #videoElement autoplay playsinline [muted]="true"></video>
 
 <div class="app-camera-controls app-camera__controls">
-  <div class="app-camera-control-group">
+  <div class="app-camera-control-mat app-camera-control-mat_left">
     <button
       class="app-camera-button app-camera-button_fill"
       type="button"
+      (click)="toggleQualityOverlay()"
+      cdkOverlayOrigin
+      #qualityTrigger="cdkOverlayOrigin"
     >
       <img
         class="app-camera-button__icon app-camera-button__icon_settings"
@@ -13,9 +16,35 @@
         height="40"
         alt="Settings icon">
     </button>
+
+    <!-- Quality Overlay -->
+    <ng-template
+      cdkConnectedOverlay
+      [cdkConnectedOverlayOrigin]="qualityTrigger"
+      [cdkConnectedOverlayOpen]="isQualityOverlayOpen"
+      [cdkConnectedOverlayPositions]="overlayPositions"
+      (overlayOutsideClick)="isQualityOverlayOpen = false"
+    >
+      <div class="app-camera-control-mat app-camera-control-mat_overlay">
+        <button
+          *ngFor="let qualityOption of qualities; trackBy: trackQualityOption"
+          class="app-camera-quality-option"
+          [class.app-camera-quality-option_selected]="qualityOption.value === quality"
+          (click)="selectQuality(qualityOption.value)"
+        >
+          <span class="app-camera-quality-option__resolution">
+            {{ qualityOption.resolution }}p
+          </span>
+
+          <span class="app-camera-quality-option__label">
+            ({{ qualityOption.label }})
+          </span>
+        </button>
+      </div>
+    </ng-template>
   </div>
 
-  <div class="app-camera-control-group app-camera-control-group_middle">
+  <div class="app-camera-control-mat app-camera-control-mat_middle">
     <button
       class="app-camera-button app-camera-button_white"
       type="button"

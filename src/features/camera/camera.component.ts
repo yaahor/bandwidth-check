@@ -1,3 +1,4 @@
+import { ConnectedPosition } from '@angular/cdk/overlay';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -9,11 +10,19 @@ import {
   NgZone,
   OnDestroy,
   OnInit,
-  Output, Renderer2,
+  Output,
+  Renderer2,
+  TrackByFunction,
   ViewChild
 } from '@angular/core';
 import { MediaQuality } from './model/media-quality';
 import { VideoCamera } from './model/video-camera';
+
+interface QualityOption {
+  label: string;
+  resolution: number;
+  value: MediaQuality;
+}
 
 @Component({
   selector: 'app-camera',
@@ -29,6 +38,8 @@ export class CameraComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('progressValueElement') private progressValueElementRef?: ElementRef<HTMLSpanElement>;
 
   protected readonly maxRecordDurationSeconds = 10;
+  protected isQualityOverlayOpen = false;
+  protected trackQualityOption: TrackByFunction<QualityOption> = (_, option) => option.value;
   private recordingTimeout?: number;
   private recordingStartTimestamp = 0;
   private animationFrameId?: number;
@@ -58,7 +69,8 @@ export class CameraComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async ngAfterViewInit(): Promise<void> {
     if (this.videoElementRef) {
-      this.videoElementRef.nativeElement.srcObject = await this.camera?.turnOn() ?? null;
+      // todo uncomment
+      // this.videoElementRef.nativeElement.srcObject = await this.camera?.turnOn() ?? null;
     }
   }
 
@@ -110,4 +122,24 @@ export class CameraComponent implements OnInit, AfterViewInit, OnDestroy {
       this.animationFrameId = window.requestAnimationFrame(() => this.updateProgress());
     }
   }
+
+  protected readonly qualities: QualityOption[] = [
+    { value: MediaQuality.LOW, resolution: 360, label: 'Low Quality' },
+    { value: MediaQuality.MEDIUM, resolution: 720, label: 'Medium Quality' },
+    { value: MediaQuality.HIGH, resolution: 1080, label: 'High Quality' }
+  ];
+
+  protected toggleQualityOverlay(): void {
+    this.isQualityOverlayOpen = !this.isQualityOverlayOpen;
+  }
+
+  protected selectQuality(quality: MediaQuality): void {
+    this.quality = quality;
+    this.isQualityOverlayOpen = false;
+    // todo change video quality
+  }
+
+  protected readonly overlayPositions: ConnectedPosition[] = [
+    { originX: 'end', originY: 'bottom', overlayX: 'start', overlayY: 'bottom', offsetX: 12 },
+  ];
 }

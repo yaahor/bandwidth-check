@@ -1,79 +1,106 @@
+@use 'sass:math';
+
+$control-group--size: 80px;
+
+@mixin scaled($from, $to) {
+  transform: scale(math.div($to, $from));
+}
+
 :host {
   display: block;
+  position: relative;
+}
+
+.app-camera__controls {
+  bottom: 0;
+  display: grid;
+  grid-template-columns: $control-group--size min-content $control-group--size;
+  justify-content: space-between;
+  left: 0;
+  padding: 28px 30px;
+  position: absolute;
+  right: 0;
 }
 
 .app-camera__video {
+  background-color: white; // todo remove
+  border-radius: 8px;
   width: 100%;
 }
 
-.controls {
-  margin: 1rem 0;
-}
+//region .app-camera-control-group
+.app-camera-control-group {
+  $blur: blur(10px);
 
-.quality-indicator {
-  font-size: 0.875rem;
-  color: #6b7280;
-}
-
-.record-btn {
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  border: none;
-  background: #2563eb;
-  color: white;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background: #1d4ed8;
-  }
-
-  &.recording {
-    background: #dc2626;
-    animation: pulse 2s infinite;
-
-    &:hover {
-      background: #b91c1c;
-    }
-  }
-}
-
-@keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.8; }
-  100% { opacity: 1; }
-}
-
-.recording-controls {
+  align-items: center;
+  -webkit-backdrop-filter: $blur;
+  backdrop-filter: $blur;
+  background-color: #00000099;
+  border-radius: math.div($control-group--size, 2);
+  border-width: 0;
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.progress-container {
-  position: relative;
-  width: 100%;
-  height: 8px;
-  background: #e5e7eb;
-  border-radius: 4px;
+  gap: 16px;
+  height: $control-group--size;
+  justify-content: center;
+  min-width: $control-group--size;
   overflow: hidden;
 }
 
-.progress-bar {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  background: #dc2626;
-  transition: width 100ms linear;
+.app-camera-control-group_middle {
+  width: 300px;
 }
 
-.progress-text {
-  position: absolute;
-  top: -20px;
-  right: 0;
-  font-size: 0.875rem;
-  color: white;
+//endregion
+
+//region .app-camera-button
+.app-camera-button {
+  align-items: center;
+  background-color: transparent;
+  border-radius: 50%;
+  border-width: 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  outline: none;
+  padding: 0;
+
+  &:hover {
+    .app-camera-button__icon_settings {
+      @include scaled(40, 48);
+    }
+
+    .app-camera-button__icon_start {
+      @include scaled(28, 32);
+    }
+
+    .app-camera-button__icon_stop {
+      @include scaled(22, 26);
+    }
+  }
+
+  &:not(.app-camera-button_fill) {
+    $size: 60px;
+
+    height: $size;
+    width: $size;
+  }
 }
+
+.app-camera-button_fill {
+  height: 100%;
+  width: 100%;
+}
+
+.app-camera-button_white {
+  background-color: #FFFFFF;
+}
+
+.app-camera-button_stop {
+  border: 3px solid #5061D0;
+}
+
+.app-camera-button__icon {
+  transition: linear transform 0.2s;
+}
+
+//endregion

@@ -72,17 +72,7 @@ export class CameraComponent implements OnInit, AfterViewInit, OnDestroy {
     this.camera?.turnOff();
   }
 
-  protected toggleRecording() {
-    if (!this.camera) return;
-
-    if (!this.camera.isRecording) {
-      this.startRecordingWithTimeout();
-    } else {
-      this.stopRecording();
-    }
-  }
-
-  private startRecordingWithTimeout() {
+  protected startRecordingWithTimeout() {
     this.camera?.startRecording();
     this.recordingProgress = 0;
     this.recordingStartTime = performance.now();
@@ -111,7 +101,7 @@ export class CameraComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   };
 
-  private stopRecording() {
+  protected stopRecording() {
     if (this.recordingTimeout) {
       window.clearTimeout(this.recordingTimeout);
       this.recordingTimeout = undefined;

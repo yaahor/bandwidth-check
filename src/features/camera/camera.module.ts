@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { CameraComponent } from './camera.component';
 
 @NgModule({
@@ -10,7 +10,8 @@ import { CameraComponent } from './camera.component';
     CameraComponent,
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    NgOptimizedImage
   ]
 })
 export class CameraModule { }

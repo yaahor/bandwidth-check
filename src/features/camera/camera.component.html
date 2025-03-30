@@ -1,25 +1,49 @@
 <video class="app-camera__video" #videoElement autoplay playsinline [muted]="true"></video>
 
-<div class="controls">
-  <div class="quality-indicator">
-    Current Quality: {{ quality }}
+<div class="app-camera-controls app-camera__controls">
+  <div class="app-camera-control-group">
+    <button
+      class="app-camera-button app-camera-button_fill"
+      type="button"
+    >
+      <img
+        class="app-camera-button__icon app-camera-button__icon_settings"
+        ngSrc="assets/settings.svg"
+        width="40"
+        height="40"
+        alt="Settings icon">
+    </button>
   </div>
 
-  <div class="recording-controls">
+  <div class="app-camera-control-group app-camera-control-group_middle">
     <button
-      (click)="toggleRecording()"
-      [class.recording]="isRecording"
-      class="record-btn"
+      *ngIf="!isRecording"
+      class="app-camera-button app-camera-button_white"
+      type="button"
+      (click)="startRecordingWithTimeout()"
     >
-      {{ isRecording ? 'Stop Recording' : 'Start Recording' }}
+      <img
+        class="app-camera-button__icon app-camera-button__icon_start"
+        ngSrc="assets/record-start.svg"
+        width="28"
+        height="28"
+        alt="Record start icon"
+      >
     </button>
 
-    <div  class="progress-container"> <!--*ngIf="isRecording"-->
-      <div
-        class="progress-bar"
-        [style.width.%]="recordingProgress"
-      ></div>
-      <span class="progress-text">{{ (MAX_DURATION - (recordingProgress * MAX_DURATION / 100)) / 1000 | number:'1.0-1' }}s</span>
-    </div>
+    <button
+      *ngIf="isRecording"
+      class="app-camera-button app-camera-button_white app-camera-button_stop"
+      type="button"
+      (click)="stopRecording()"
+    >
+      <img
+        class="app-camera-button__icon app-camera-button__icon_stop"
+        ngSrc="assets/record-stop.svg"
+        width="22"
+        height="22"
+        alt="Record stop icon"
+      >
+    </button>
   </div>
 </div>

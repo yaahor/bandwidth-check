@@ -1,8 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, TrackByFunction } from '@angular/core';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { MediaQuality } from '../features/camera/model/media-quality';
 import { VideoRecord } from '../shared/model/video-record';
 import { getDownloadSpeedMbps } from './lib/get-download-speed-mbps';
 import { mapSpeedMbpsToMediaQuality } from './lib/map-speed-mbps-to-media-quality';
+import { AddVideoRecord, RecordedVideosState } from './model/recorded-videos.state';
 
 @Component({
   selector: 'app-root',
@@ -10,23 +13,19 @@ import { mapSpeedMbpsToMediaQuality } from './lib/map-speed-mbps-to-media-qualit
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
+  @Select(RecordedVideosState.getVideos) protected records$!: Observable<VideoRecord[]>;
   protected quality?: Promise<MediaQuality>;
-  protected records: VideoRecord[] = [];
   protected readonly trackRecord: TrackByFunction<VideoRecord> = (_, record) => record.timestamp;
+
+  constructor(private store: Store) {}
 
   async ngOnInit() {
     this.quality = getDownloadSpeedMbps().then(mapSpeedMbpsToMediaQuality);
   }
 
-  ngOnDestroy() {
-    this.records.forEach(record => {
-      URL.revokeObjectURL(record.url);
-    });
-  }
-
   protected onVideoRecorded(blob: Blob): void {
-    const record = { blob, timestamp: Date.now(), url: URL.createObjectURL(blob) };
-    this.records = [...this.records, record];
+    const record: VideoRecord = { blob, timestamp: Date.now() };
+    this.store.dispatch(new AddVideoRecord(record));
   }
 }

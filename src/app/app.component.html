@@ -31,10 +31,18 @@
   </ng-template>
 </div>
 
-<div class="app-video app__card">
-  <video
-    *ngFor="let record of records; trackBy: trackRecord"
-  >
-    <source [src]="record.url" type="video/webm">
-  </video>
+<div class="recordings app__card">
+  <ng-container *ngIf="records$ | async as records">
+    <h3 *ngIf="records.length > 0">Recorded Videos</h3>
+    <div class="recordings-list">
+      <div *ngFor="let record of records; trackBy: trackRecord" class="recording-item">
+        <video controls>
+<!--          <source [src]="record.url" type="video/webm">-->
+        </video>
+        <div class="recording-info">
+          <span>{{ record.timestamp | date:'medium' }}</span>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </div>

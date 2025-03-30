@@ -5,11 +5,21 @@
     Current Quality: {{ quality }}
   </div>
 
-  <button
-    (click)="toggleRecording()"
-    [class.recording]="isRecording"
-    class="record-btn"
-  >
-    {{ isRecording ? 'Stop Recording' : 'Start Recording' }}
-  </button>
+  <div class="recording-controls">
+    <button
+      (click)="toggleRecording()"
+      [class.recording]="isRecording"
+      class="record-btn"
+    >
+      {{ isRecording ? 'Stop Recording' : 'Start Recording' }}
+    </button>
+
+    <div  class="progress-container"> <!--*ngIf="isRecording"-->
+      <div
+        class="progress-bar"
+        [style.width.%]="recordingProgress"
+      ></div>
+      <span class="progress-text">{{ (MAX_DURATION - (recordingProgress * MAX_DURATION / 100)) / 1000 | number:'1.0-1' }}s</span>
+    </div>
+  </div>
 </div>

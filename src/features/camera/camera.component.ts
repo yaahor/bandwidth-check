@@ -9,7 +9,7 @@ import {
   NgZone,
   OnDestroy,
   OnInit,
-  Output,
+  Output, Renderer2,
   ViewChild
 } from '@angular/core';
 import { MediaQuality } from './model/media-quality';
@@ -24,12 +24,13 @@ import { VideoCamera } from './model/video-camera';
 export class CameraComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() quality: MediaQuality = MediaQuality.MEDIUM;
   @Output() videoRecorded = new EventEmitter<Blob>();
-
   @ViewChild('videoElement') private videoElementRef?: ElementRef<HTMLVideoElement>;
+  @ViewChild('progressLineElement') private progressLineElementRef?: ElementRef<HTMLProgressElement>;
+  @ViewChild('progressValueElement') private progressValueElementRef?: ElementRef<HTMLSpanElement>;
 
-  protected readonly MAX_DURATION = 10000; // 10 seconds in milliseconds
+  protected readonly maxRecordDurationSeconds = 10;
   private recordingTimeout?: number;
-  private recordingStartTime = 0;
+  private recordingStartTimestamp = 0;
   private animationFrameId?: number;
 
   protected get isRecording(): boolean {
@@ -38,11 +39,10 @@ export class CameraComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private camera?: VideoCamera;
 
-  protected recordingProgress = 0;
-
   constructor(
     private readonly changeDetectorRef: ChangeDetectorRef,
-    private readonly ngZone: NgZone
+    private readonly ngZone: NgZone,
+    private readonly renderer: Renderer2,
   ) {
   }
 
@@ -74,34 +74,18 @@ export class CameraComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected startRecordingWithTimeout() {
     this.camera?.startRecording();
-    this.recordingProgress = 0;
-    this.recordingStartTime = performance.now();
+    this.recordingStartTimestamp = Date.now();
 
     // Start the animation frame loop
-    this.ngZone.runOutsideAngular(() => {
-      this.updateProgress();
-    });
+    this.updateProgress();
 
     // Set timeout to stop recording after MAX_DURATION
     this.recordingTimeout = window.setTimeout(() => {
-      this.ngZone.run(() => {
-        this.stopRecording();
-      });
-    }, this.MAX_DURATION);
+      this.stopRecording();
+    }, this.maxRecordDurationSeconds * 1000);
   }
 
-  private updateProgress = () => {
-    const currentTime = performance.now();
-    const elapsed = currentTime - this.recordingStartTime;
-
-    this.recordingProgress = Math.min(100, (elapsed / this.MAX_DURATION) * 100);
-
-    if (this.isRecording) {
-      this.animationFrameId = window.requestAnimationFrame(this.updateProgress);
-    }
-  };
-
-  protected stopRecording() {
+  protected stopRecording(): void {
     if (this.recordingTimeout) {
       window.clearTimeout(this.recordingTimeout);
       this.recordingTimeout = undefined;
@@ -110,8 +94,20 @@ export class CameraComponent implements OnInit, AfterViewInit, OnDestroy {
       window.cancelAnimationFrame(this.animationFrameId);
       this.animationFrameId = undefined;
     }
-    this.recordingProgress = 0;
     this.camera?.stopRecording();
     this.changeDetectorRef.detectChanges();
+  }
+
+  private updateProgress(): void  {
+    const elapsedMilliseconds = Date.now() - this.recordingStartTimestamp;
+    const elapsedSeconds = elapsedMilliseconds / 1000;
+    const elapsedSecondsString = elapsedSeconds.toFixed(1);
+
+    this.renderer.setAttribute(this.progressLineElementRef?.nativeElement, 'value', elapsedSeconds.toFixed(3));
+    this.renderer.setProperty(this.progressValueElementRef?.nativeElement, 'textContent', `${elapsedSecondsString}s`);
+
+    if (this.isRecording) {
+      this.animationFrameId = window.requestAnimationFrame(() => this.updateProgress());
+    }
   }
 }

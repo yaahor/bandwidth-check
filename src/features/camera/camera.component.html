@@ -45,5 +45,15 @@
         alt="Record stop icon"
       >
     </button>
+
+    <div class="app-camera-progress">
+      <progress
+        #progressLineElement
+        class="app-camera-progress__line"
+        [max]="maxRecordDurationSeconds"
+      ></progress>
+
+      <span class="app-camera-progress__value" #progressValueElement></span>
+    </div>
   </div>
 </div>

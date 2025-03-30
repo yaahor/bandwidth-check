@@ -104,3 +104,43 @@ $control-group--size: 80px;
 }
 
 //endregion
+
+//region .app-camera-progress
+.app-camera-progress {
+  position: relative;
+}
+
+.app-camera-progress__line {
+  appearance: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  height: 24px;
+  overflow: hidden;
+
+  width: 143.5px;
+
+  &::-webkit-progress-bar {
+    background-color: rgba(255, 255, 255, 0.2); // #FFFFFF33
+  }
+
+  &::-webkit-progress-value {
+    background-color: #5061D0;
+  }
+
+  &::-moz-progress-bar {
+    background-color: #5061D0;
+  }
+}
+
+.app-camera-progress__value {
+  color: white;
+  font-family: Lato;
+  font-size: 1rem;
+  font-weight: 900;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+//endregion

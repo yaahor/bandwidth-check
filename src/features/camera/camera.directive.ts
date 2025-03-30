@@ -2,7 +2,8 @@ import {
   Directive,
   ElementRef,
   EventEmitter,
-  Input, NgZone,
+  Input,
+  NgZone,
   OnDestroy,
   OnInit,
   Output
@@ -17,6 +18,9 @@ import { VideoCamera } from './model/video-camera';
 export class CameraDirective implements OnInit, OnDestroy {
   @Input() quality: MediaQuality = MediaQuality.MEDIUM;
   @Output() videoRecorded = new EventEmitter<Blob>();
+
+  private readonly MAX_DURATION = 10000; // 10 seconds in milliseconds
+  private recordingTimeout?: number;
 
   get isRecording(): boolean {
     return this.camera?.isRecording ?? false;
@@ -35,13 +39,16 @@ export class CameraDirective implements OnInit, OnDestroy {
     this.camera.setOnVideoRecorded((blob) => {
       this.ngZone.run(() => {
         this.videoRecorded.emit(blob);
-      })
+      });
     });
 
     this.elementRef.nativeElement.srcObject = await this.camera.turnOn();
   }
 
   ngOnDestroy(): void {
+    if (this.recordingTimeout) {
+      window.clearTimeout(this.recordingTimeout);
+    }
     this.camera?.turnOff();
   }
 
@@ -49,9 +56,28 @@ export class CameraDirective implements OnInit, OnDestroy {
     if (!this.camera) return;
 
     if (!this.camera.isRecording) {
-      this.camera.startRecording();
+      this.startRecordingWithTimeout();
     } else {
-      this.camera.stopRecording();
+      this.stopRecording();
     }
+  }
+
+  private startRecordingWithTimeout() {
+    this.camera?.startRecording();
+    
+    // Set timeout to stop recording after MAX_DURATION
+    this.recordingTimeout = window.setTimeout(() => {
+      this.ngZone.run(() => {
+        this.stopRecording();
+      });
+    }, this.MAX_DURATION);
+  }
+
+  private stopRecording() {
+    if (this.recordingTimeout) {
+      window.clearTimeout(this.recordingTimeout);
+      this.recordingTimeout = undefined;
+    }
+    this.camera?.stopRecording();
   }
 }

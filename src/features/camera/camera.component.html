@@ -1,0 +1,15 @@
+<video class="app-camera__video" #videoElement autoplay playsinline [muted]="true"></video>
+
+<div class="controls">
+  <div class="quality-indicator">
+    Current Quality: {{ quality }}
+  </div>
+
+  <button
+    (click)="toggleRecording()"
+    [class.recording]="isRecording"
+    class="record-btn"
+  >
+    {{ isRecording ? 'Stop Recording' : 'Start Recording' }}
+  </button>
+</div>

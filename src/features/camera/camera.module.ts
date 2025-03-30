@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CameraDirective } from './camera.directive';
+import { CameraComponent } from './camera.component';
 
 @NgModule({
   declarations: [
-    CameraDirective
+    CameraComponent,
   ],
   exports: [
-    CameraDirective
+    CameraComponent,
   ],
   imports: [
     CommonModule

@@ -1,27 +1,6 @@
 <div class="app-video app__card">
   <ng-container *ngIf="quality | async as quality; else spinner">
-    <video
-      appCamera
-      (videoRecorded)="onVideoRecorded($event)"
-      #camera="appCamera"
-      autoplay
-      playsinline
-      [muted]="true"
-    ></video>
-
-    <div class="controls">
-      <div class="quality-indicator">
-        Current Quality: {{ quality }}
-      </div>
-
-      <button
-        (click)="camera.toggleRecording()"
-        [class.recording]="camera.isRecording"
-        class="record-btn"
-      >
-        {{ camera.isRecording ? 'Stop Recording' : 'Start Recording' }}
-      </button>
-    </div>
+    <app-camera [quality]="quality" (videoRecorded)="onVideoRecorded($event)"></app-camera>
   </ng-container>
 
   <ng-template #spinner>

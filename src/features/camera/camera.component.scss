@@ -1,0 +1,46 @@
+:host {
+  display: block;
+}
+
+.app-camera__video {
+  width: 100%;
+}
+
+.controls {
+  margin: 1rem 0;
+}
+
+.quality-indicator {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.record-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: #1d4ed8;
+  }
+
+  &.recording {
+    background: #dc2626;
+    animation: pulse 2s infinite;
+
+    &:hover {
+      background: #b91c1c;
+    }
+  }
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.8; }
+  100% { opacity: 1; }
+}

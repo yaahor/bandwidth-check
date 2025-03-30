@@ -59,10 +59,13 @@ $control-group--size: 80px;
   border-radius: 50%;
   border-width: 0;
   cursor: pointer;
-  display: flex;
   justify-content: center;
   outline: none;
   padding: 0;
+
+  &:not([hidden]) {
+    display: flex;
+  }
 
   &:hover {
     .app-camera-button__icon_settings {

@@ -17,10 +17,10 @@
 
   <div class="app-camera-control-group app-camera-control-group_middle">
     <button
-      *ngIf="!isRecording"
       class="app-camera-button app-camera-button_white"
       type="button"
       (click)="startRecordingWithTimeout()"
+      [hidden]="isRecording"
     >
       <img
         class="app-camera-button__icon app-camera-button__icon_start"
@@ -32,10 +32,10 @@
     </button>
 
     <button
-      *ngIf="isRecording"
       class="app-camera-button app-camera-button_white app-camera-button_stop"
       type="button"
       (click)="stopRecording()"
+      [hidden]="!isRecording"
     >
       <img
         class="app-camera-button__icon app-camera-button__icon_stop"
@@ -46,7 +46,7 @@
       >
     </button>
 
-    <div class="app-camera-progress">
+    <div class="app-camera-progress" [hidden]="!isRecording">
       <progress
         #progressLineElement
         class="app-camera-progress__line"

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RecordListItemComponent } from './record-list-item.component';
 
-describe('PlayerComponent', () => {
+describe(RecordListItemComponent.name, () => {
   let component: RecordListItemComponent;
   let fixture: ComponentFixture<RecordListItemComponent>;
 

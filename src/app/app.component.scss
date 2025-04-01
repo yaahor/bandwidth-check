@@ -16,6 +16,13 @@
   overflow-y: auto;
 }
 
+.app__card_records {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 //region .app-video
 .app-video {
   min-height: 136px;

@@ -5,7 +5,7 @@ import { MediaQuality } from '../features/camera/model/media-quality';
 import { VideoRecord } from '../shared/model/video-record';
 import { getDownloadSpeedMbps } from './lib/get-download-speed-mbps';
 import { mapSpeedMbpsToMediaQuality } from './lib/map-speed-mbps-to-media-quality';
-import { AddVideoRecord, RecordedVideosState } from './model/recorded-videos.state';
+import { AddVideoRecord, GetVideoRecords, RecordedVideosState } from './model/recorded-videos.state';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
   constructor(private store: Store) {}
 
   async ngOnInit() {
+    this.store.dispatch(new GetVideoRecords());
     this.quality = getDownloadSpeedMbps().then(mapSpeedMbpsToMediaQuality);
   }
 

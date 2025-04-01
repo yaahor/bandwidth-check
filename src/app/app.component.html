@@ -1,6 +1,6 @@
 <div class="app-video app__card">
   <ng-container *ngIf="quality | async as quality; else spinner">
-    <app-camera [quality]="quality" (videoRecorded)="onVideoRecorded($event)"></app-camera>
+    <app-camera class="app-video__camera" [quality]="quality" (videoRecorded)="onVideoRecorded($event)"></app-camera>
   </ng-container>
 
   <ng-template #spinner>
@@ -10,7 +10,7 @@
   </ng-template>
 </div>
 
-<div class="recordings app__card">
+<div class="app__card app__card_records">
   <ng-container *ngIf="records$ | async as records">
     <app-record-list-item *ngFor="let record of records; trackBy: trackRecord"  [record]="record"></app-record-list-item>
   </ng-container>

@@ -12,6 +12,10 @@
 
 <div class="app__card app__card_records">
   <ng-container *ngIf="records$ | async as records">
-    <app-record-list-item *ngFor="let record of records; trackBy: trackRecord"  [record]="record"></app-record-list-item>
+    <app-record-list-item
+      *ngFor="let record of records; trackBy: trackRecord"
+      [record]="record"
+      (removed)="onRecordRemoved(record)"
+    ></app-record-list-item>
   </ng-container>
 </div>

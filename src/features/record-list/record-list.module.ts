@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RecordListItemComponent } from './record-list-item.component';
 
 
@@ -9,7 +9,8 @@ import { RecordListItemComponent } from './record-list-item.component';
     RecordListItemComponent,
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    NgOptimizedImage,
   ],
   exports: [
     RecordListItemComponent,

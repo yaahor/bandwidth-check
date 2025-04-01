@@ -15,6 +15,7 @@ import {
   TrackByFunction,
   ViewChild
 } from '@angular/core';
+import { VideoRecord } from '../../shared/model/video-record';
 import { MediaQuality } from './model/media-quality';
 import { VideoCamera } from './model/video-camera';
 
@@ -32,7 +33,7 @@ interface QualityOption {
 })
 export class CameraComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() quality: MediaQuality = MediaQuality.MEDIUM;
-  @Output() videoRecorded = new EventEmitter<Blob>();
+  @Output() videoRecorded = new EventEmitter<VideoRecord>();
   @ViewChild('videoElement') private videoElementRef?: ElementRef<HTMLVideoElement>;
   @ViewChild('progressLineElement') private progressLineElementRef?: ElementRef<HTMLProgressElement>;
   @ViewChild('progressValueElement') private progressValueElementRef?: ElementRef<HTMLSpanElement>;
@@ -61,16 +62,18 @@ export class CameraComponent implements OnInit, AfterViewInit, OnDestroy {
     this.camera = new VideoCamera(this.quality);
 
     this.camera.setOnVideoRecorded((blob) => {
+      const timestamp = Date.now();
+      const durationMs= timestamp - this.recordingStartTimestamp;
+
       this.ngZone.run(() => {
-        this.videoRecorded.emit(blob);
+        this.videoRecorded.emit({ blob, durationMs, timestamp});
       });
     });
   }
 
   async ngAfterViewInit(): Promise<void> {
     if (this.videoElementRef) {
-      // todo uncomment
-      // this.videoElementRef.nativeElement.srcObject = await this.camera?.turnOn() ?? null;
+      this.videoElementRef.nativeElement.srcObject = await this.camera?.turnOn() ?? null;
     }
   }
 

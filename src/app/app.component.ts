@@ -5,7 +5,7 @@ import { MediaQuality } from '../features/camera/model/media-quality';
 import { VideoRecord } from '../shared/model/video-record';
 import { getDownloadSpeedMbps } from './lib/get-download-speed-mbps';
 import { mapSpeedMbpsToMediaQuality } from './lib/map-speed-mbps-to-media-quality';
-import { AddVideoRecord, GetVideoRecords, RecordedVideosState } from './model/recorded-videos.state';
+import { AddVideoRecord, GetVideoRecords, RecordedVideosState, RemoveVideoRecord } from './model/recorded-videos.state';
 
 @Component({
   selector: 'app-root',
@@ -25,8 +25,11 @@ export class AppComponent implements OnInit {
     this.quality = getDownloadSpeedMbps().then(mapSpeedMbpsToMediaQuality);
   }
 
-  protected onVideoRecorded(blob: Blob): void {
-    const record: VideoRecord = { blob, timestamp: Date.now() };
+  protected onVideoRecorded(record: VideoRecord): void {
     this.store.dispatch(new AddVideoRecord(record));
+  }
+
+  protected onRecordRemoved(record: VideoRecord): void {
+    this.store.dispatch(new RemoveVideoRecord(record));
   }
 }

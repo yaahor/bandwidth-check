@@ -1,4 +1,21 @@
-<video class="app-record-list-item__video">
-  <source [src]="url" type="video/webm">
-</video>
+<video class="app-record-list-item__video" [src]="url" type="video/webm"></video>
 
+<div class="app-record-list-item__bar app-record-list-item__bar_header">
+  <button class="app-record-list-item__button" type="button" (click)="onRemoveClick()">
+    <img ngSrc="assets/trash.svg" width="16" height="18" alt="Bin icon">
+  </button>
+</div>
+
+<div class="app-record-list-item__bar app-record-list-item__bar_footer">
+  <span class="app-record-list-item__stat">
+    <span>{{ record?.timestamp | date : 'dd.MM.yyyy' }}</span>
+
+    {{ record?.timestamp | date : 'HH:mm' }}
+  </span>
+
+  <span class="app-record-list-item__stat">
+    <ng-container *ngIf="record?.durationMs as ms">
+      {{ ms / 1000 | number : '1.0-0' }}s
+    </ng-container>
+  </span>
+</div>

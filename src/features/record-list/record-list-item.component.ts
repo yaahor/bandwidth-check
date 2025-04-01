@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import { VideoRecord } from '../../shared/model/video-record';
 
 @Component({
@@ -9,6 +18,7 @@ import { VideoRecord } from '../../shared/model/video-record';
 })
 export class RecordListItemComponent implements OnChanges, OnDestroy {
   @Input() record?: VideoRecord;
+  @Output() readonly removed = new EventEmitter<void>();
 
   protected url?: string;
 
@@ -34,5 +44,9 @@ export class RecordListItemComponent implements OnChanges, OnDestroy {
       URL.revokeObjectURL(this.url);
       this.url = undefined;
     }
+  }
+
+  protected onRemoveClick(): void {
+    this.removed.emit();
   }
 }

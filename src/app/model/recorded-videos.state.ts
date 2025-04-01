@@ -17,6 +17,11 @@ export class ClearVideoRecords {
   static readonly type = '[RecordedVideos] Clear Videos';
 }
 
+export class RemoveVideoRecord {
+  static readonly type = '[RecordedVideos] Remove Video';
+  constructor(public payload: VideoRecord) {}
+}
+
 export interface RecordedVideosStateModel {
   videos: VideoRecord[];
 }
@@ -70,6 +75,19 @@ export class RecordedVideosState {
       });
     } catch (error) {
       console.error('Failed to clear videos from IndexedDB:', error);
+    }
+  }
+
+  @Action(RemoveVideoRecord)
+  async remove(ctx: StateContext<RecordedVideosStateModel>, action: RemoveVideoRecord) {
+    try {
+      await this.storageService.removeVideo(action.payload.timestamp);
+      const state = ctx.getState();
+      ctx.setState({
+        videos: state.videos.filter(video => video.timestamp !== action.payload.timestamp)
+      });
+    } catch (error) {
+      console.error('Failed to remove video from IndexedDB:', error);
     }
   }
 }

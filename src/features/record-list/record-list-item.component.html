@@ -1,7 +1,7 @@
 <video class="app-record-list-item__video" [src]="url" type="video/webm"></video>
 
 <div class="app-record-list-item__bar app-record-list-item__bar_header">
-  <button class="app-record-list-item__button" type="button" (click)="onRemoveClick()">
+  <button class="app-record-list-item__button" type="button" (click)="onRemoveClick($event)">
     <img ngSrc="assets/trash.svg" width="16" height="18" alt="Bin icon">
   </button>
 </div>

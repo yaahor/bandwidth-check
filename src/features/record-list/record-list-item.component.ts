@@ -15,10 +15,14 @@ import { VideoRecord } from '../../shared/model/video-record';
   templateUrl: './record-list-item.component.html',
   styleUrls: ['./record-list-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '(click)': 'onHostClick()'
+  }
 })
 export class RecordListItemComponent implements OnChanges, OnDestroy {
   @Input() record?: VideoRecord;
   @Output() readonly removed = new EventEmitter<void>();
+  @Output() readonly activated = new EventEmitter();
 
   protected url?: string;
 
@@ -46,7 +50,12 @@ export class RecordListItemComponent implements OnChanges, OnDestroy {
     }
   }
 
-  protected onRemoveClick(): void {
+  protected onRemoveClick(event: MouseEvent): void {
+    event.stopPropagation()
     this.removed.emit();
+  }
+
+  protected onHostClick(): void {
+    this.activated.emit();
   }
 }

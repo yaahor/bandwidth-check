@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, TrackByFunction } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, TrackByFunction, ViewChild } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { MediaQuality } from '../features/camera/model/media-quality';
@@ -15,13 +15,18 @@ import { AddVideoRecord, GetVideoRecords, RecordedVideosState, RemoveVideoRecord
 })
 export class AppComponent implements OnInit {
   @Select(RecordedVideosState.getVideos) protected records$!: Observable<VideoRecord[]>;
+  @ViewChild('playerVideo') videoElement?: ElementRef<HTMLVideoElement>;
+  protected isPlaying = false;
 
   protected activeRecord?: VideoRecord;
   protected quality?: Promise<MediaQuality>;
   protected readonly trackRecord: TrackByFunction<VideoRecord> = (_, record) => record.timestamp;
   protected url?: string;
+  protected currentTime = 0;
+  protected currentPercentage = 0;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) {
+  }
 
   async ngOnInit() {
     this.store.dispatch(new GetVideoRecords());
@@ -29,12 +34,7 @@ export class AppComponent implements OnInit {
   }
 
   protected onCloseClick(): void {
-    if (this.url) {
-      URL.revokeObjectURL(this.url);
-    }
-
-    this.activeRecord = undefined;
-    this.url = undefined;
+    this.deactivateRecord()
   }
 
 
@@ -43,11 +43,55 @@ export class AppComponent implements OnInit {
   }
 
   protected onRecordActivated(record: VideoRecord): void {
+    this.deactivateRecord()
+
     this.activeRecord = record;
     this.url = URL.createObjectURL(record.blob);
   }
 
+  protected deactivateRecord(): void {
+    this.activeRecord = undefined;
+
+    if (this.url) {
+      URL.revokeObjectURL(this.url);
+    }
+
+    this.url = undefined;
+    this.resetVideo();
+  }
+
   protected onRecordRemoved(record: VideoRecord): void {
     this.store.dispatch(new RemoveVideoRecord(record));
+  }
+
+  protected togglePlayback(): void {
+    const video = this.videoElement?.nativeElement;
+    if (!video) return;
+
+    if (video.paused) {
+      video.play().then();
+      this.isPlaying = true;
+    } else {
+      video.pause();
+      this.isPlaying = false;
+    }
+  }
+
+  protected onVideoEnded(): void {
+    this.resetVideo();
+  }
+
+  protected onTimeUpdate(event: Event): void {
+    const video = event.target as HTMLVideoElement;
+    this.currentTime = video.currentTime;
+    this.currentPercentage = this.activeRecord?.durationMs ? (video.currentTime * 1000 / this.activeRecord?.durationMs) * 100 : 0;
+
+  }
+
+  private resetVideo(): void {
+    this.videoElement?.nativeElement.pause()
+    this.isPlaying = false;
+    this.currentTime = 0;
+    this.currentPercentage = 0;
   }
 }

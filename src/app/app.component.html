@@ -21,9 +21,15 @@
   </ng-container>
 </div>
 
-<div class="app__overlay" *ngIf="url">
+<div class="app__overlay" *ngIf="activeRecord && url">
   <div class="app-player">
-    <video class="app-player__video" [src]="url"></video>
+    <video
+      #playerVideo
+      class="app-player__video"
+      [src]="url"
+      (ended)="onVideoEnded()"
+      (timeupdate)="onTimeUpdate($event)"
+    ></video>
 
     <div class="app-player__bar app-player__bar_top">
       <button class="app-player__button" type="button" (click)="onCloseClick()">
@@ -34,21 +40,47 @@
     <div class="app-player__bar app-player__bar_bottom">
       <div class="app-player-controls">
         <button class="app-player-controls__button" type="button">
-          <img ngSrc="assets/play.svg" width="36" height="36" alt="Play icon">
+          <img
+            ngSrc="assets/pause.svg"
+            [hidden]="!isPlaying"
+            width="36"
+            height="36"
+            alt="Pause icon"
+            (click)="togglePlayback()"
+          >
+          <img
+            ngSrc="assets/play.svg"
+            [hidden]="isPlaying"
+            width="36"
+            height="36"
+            [alt]="isPlaying ? 'Pause icon' : 'Play icon'"
+            (click)="togglePlayback()"
+          >
         </button>
 
         <div class="app-player-controls__timeline">
           <span class="app-player-timeline__time">
-            00:01
+            {{ currentTime | number:'1.2-2' }}
           </span>
 
           <div class="app-player-bar">
-            <div class="app-player-bar__progress"></div>
-            <div class="app-player-bar__handle"></div>
+            <div class="app-player-bar__frame">
+              <div
+                class="app-player-bar__filler"
+                [style.transform]="'translateX(' + currentPercentage / 2 + '%)'"
+              >
+              </div>
+            </div>
+
+
+            <div
+              class="app-player-bar__handle"
+              [style.transform]="'translateX(' + currentPercentage + '%)'"
+            ></div>
           </div>
 
           <span class="app-player-timeline__time">
-            10:00
+            {{ (activeRecord.durationMs / 1000) | number:'1.2-2' }}
           </span>
         </div>
       </div>

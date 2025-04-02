@@ -16,12 +16,16 @@ $control-group--size: 80px;
 .app-camera__controls {
   bottom: 0;
   display: grid;
-  grid-template-columns: $control-group--size min-content $control-group--size;
+  grid-template-columns: $control-group--size $control-group--size;
   justify-content: space-between;
   left: 0;
   padding: 28px 30px;
   position: absolute;
   right: 0;
+
+  @media screen and (min-width: 768px) {
+    grid-template-columns: $control-group--size min-content $control-group--size;
+  }
 }
 
 .app-camera__video {
@@ -49,7 +53,10 @@ $control-group--size: 80px;
   gap: 16px;
   height: $control-group--size;
   justify-content: center;
-  width: 300px;
+
+  @media screen and (min-width: 768px) {
+    width: 300px;
+  }
 }
 
 .app-camera-control-mat_overlay {
@@ -118,6 +125,11 @@ $control-group--size: 80px;
 //region .app-camera-progress
 .app-camera-progress {
   position: relative;
+  display: none;
+
+  @media screen and (min-width: 768px) {
+    display: block;
+  }
 }
 
 .app-camera-progress__line {

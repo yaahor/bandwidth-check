@@ -13,6 +13,7 @@
 <div class="app__card app__card_records">
   <ng-container *ngIf="records$ | async as records">
     <app-record-list-item
+      class="app__item"
       *ngFor="let record of records; trackBy: trackRecord"
       [record]="record"
       (activated)="onRecordActivated(record)"
@@ -91,7 +92,7 @@
 <div class="app__overlay" *ngIf="removedRecord">
   <div class="app-dialog">
     <div class="app-dialog__header">
-      <button class="app-dialog__button app-dialog__button_close" type="button">
+      <button class="app-dialog__button app-dialog__button_close" type="button" (click)="onDialogCancel()">
         <img ngSrc="assets/close.svg" width="24" height="24" alt="Close icon">
       </button>
     </div>

@@ -3,15 +3,20 @@
 
 .app, :host {
   box-sizing: border-box;
-  display: grid;
-  gap: 40px;
-  grid-template-columns: 1fr 300px;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
   margin: 0 auto;
   max-width: 1920px;
   overflow: auto;
   padding: 40px;
   position: relative;
+
+  @media screen and (min-width: 1024px) {
+    display: grid;
+    gap: 40px;
+    grid-template-columns: 1fr 300px;
+    height: 100%;
+  }
 }
 
 .app__card {
@@ -21,10 +26,11 @@
 }
 
 .app__card_records {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
   padding: 20px;
+}
+
+.app__item {
+  margin-bottom: 12px;
 }
 
 .app__overlay {
@@ -38,7 +44,7 @@
   left: 0;
   overflow: hidden;
   padding: 20px;
-  position: absolute;
+  position: fixed;
   right: 0;
   top: 0;
 }
@@ -217,11 +223,11 @@ $bar-height: 4px;
 .app-dialog {
   background-color: #FFFFFF;
   border-radius: 8px;
+  box-sizing: border-box;
+  max-width: 400px;
   padding: 20px 40px;
   position: relative;
   text-align: center;
-  max-width: 400px;
-  box-sizing: border-box;
 }
 
 .app-dialog__button {
@@ -240,38 +246,40 @@ $bar-height: 4px;
 }
 
 .app-dialog__button_cancel {
-  border: 1px solid #5061D0;
   background-color: #FFFFFF;
+  border: 1px solid #5061D0;
   border-radius: 8px;
   color: #5061D0;
-  font-weight: 700;
   font-size: 14px;
+  font-weight: 700;
   padding: 7.5px 0;
 }
 
 .app-dialog__button_delete {
   background-color: #E53F28;
-  color: #FFFFFF;
   border-radius: 8px;
+  color: #FFFFFF;
 }
 
 .app-dialog__buttons {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 20px;
+  grid-template-columns: 1fr 1fr;
 }
 
 .app-dialog__header {
   left: 0;
   position: absolute;
   right: 0;
-  top: 0;
   text-align: right;
+  top: 0;
 }
+
 //endregion
 
 //region .app-dialog-content
-.app-dialog-content {}
+.app-dialog-content {
+}
 
 .app-dialog-content__icon {
   margin-bottom: 8px;
@@ -290,4 +298,5 @@ $bar-height: 4px;
   line-height: 150%;
   margin: 0 0 12px 0;
 }
+
 //endregion

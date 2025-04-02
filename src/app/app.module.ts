@@ -1,3 +1,4 @@
+import { NgOptimizedImage } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgxsModule } from '@ngxs/store';
@@ -17,6 +18,7 @@ import { RecordedVideosState } from './model/recorded-videos.state';
       developmentMode: true
     }),
     RecordListModule,
+    NgOptimizedImage,
   ],
   bootstrap: [AppComponent]
 })

@@ -1,10 +1,10 @@
-<div class="app-video app__card">
+<div class="app-recorder app__card">
   <ng-container *ngIf="quality | async as quality; else spinner">
-    <app-camera class="app-video__camera" [quality]="quality" (videoRecorded)="onVideoRecorded($event)"></app-camera>
+    <app-camera class="app-recorder__camera" [quality]="quality" (videoRecorded)="onVideoRecorded($event)"></app-camera>
   </ng-container>
 
   <ng-template #spinner>
-    <div class="app-video__spinner">
+    <div class="app-recorder__spinner">
       <app-spinner></app-spinner>
     </div>
   </ng-template>
@@ -15,7 +15,43 @@
     <app-record-list-item
       *ngFor="let record of records; trackBy: trackRecord"
       [record]="record"
+      (activated)="onRecordActivated(record)"
       (removed)="onRecordRemoved(record)"
     ></app-record-list-item>
   </ng-container>
+</div>
+
+<div class="app__overlay" *ngIf="url">
+  <div class="app-player">
+    <video class="app-player__video" [src]="url"></video>
+
+    <div class="app-player__bar app-player__bar_top">
+      <button class="app-player__button" type="button" (click)="onCloseClick()">
+        <img ngSrc="assets/cross.svg" width="24" height="24" alt="Close icon">
+      </button>
+    </div>
+
+    <div class="app-player__bar app-player__bar_bottom">
+      <div class="app-player-controls">
+        <button class="app-player-controls__button" type="button">
+          <img ngSrc="assets/play.svg" width="36" height="36" alt="Play icon">
+        </button>
+
+        <div class="app-player-timeline">
+          <span class="app-player-timeline__time">
+            00:01
+          </span>
+
+          <div class="app-player-bar">
+            <div class="app-player-bar__progress"></div>
+            <div class="app-player-bar__handle"></div>
+          </div>
+
+          <span class="app-player-timeline__time">
+            10:00
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

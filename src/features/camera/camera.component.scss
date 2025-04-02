@@ -1,4 +1,5 @@
 @use 'sass:math';
+@use '../../shared/ui/mixins';
 
 $control-group--size: 80px;
 
@@ -30,9 +31,7 @@ $control-group--size: 80px;
 
 //region .app-camera-control-mat
 .app-camera-control-mat {
-  $blur: blur(10px);
-  -webkit-backdrop-filter: $blur;
-  backdrop-filter: $blur;
+  @include mixins.blur();
   background-color: #00000099;
   overflow: hidden;
 }

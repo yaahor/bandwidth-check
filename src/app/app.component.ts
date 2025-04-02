@@ -15,8 +15,11 @@ import { AddVideoRecord, GetVideoRecords, RecordedVideosState, RemoveVideoRecord
 })
 export class AppComponent implements OnInit {
   @Select(RecordedVideosState.getVideos) protected records$!: Observable<VideoRecord[]>;
+
+  protected activeRecord?: VideoRecord;
   protected quality?: Promise<MediaQuality>;
   protected readonly trackRecord: TrackByFunction<VideoRecord> = (_, record) => record.timestamp;
+  protected url?: string;
 
   constructor(private store: Store) {}
 
@@ -25,8 +28,23 @@ export class AppComponent implements OnInit {
     this.quality = getDownloadSpeedMbps().then(mapSpeedMbpsToMediaQuality);
   }
 
+  protected onCloseClick(): void {
+    if (this.url) {
+      URL.revokeObjectURL(this.url);
+    }
+
+    this.activeRecord = undefined;
+    this.url = undefined;
+  }
+
+
   protected onVideoRecorded(record: VideoRecord): void {
     this.store.dispatch(new AddVideoRecord(record));
+  }
+
+  protected onRecordActivated(record: VideoRecord): void {
+    this.activeRecord = record;
+    this.url = URL.createObjectURL(record.blob);
   }
 
   protected onRecordRemoved(record: VideoRecord): void {

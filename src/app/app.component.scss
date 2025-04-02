@@ -91,10 +91,6 @@
   width: 44px;
 }
 
-.app-player__controls {
-
-}
-
 //endregion
 
 //region .app-player-controls
@@ -127,10 +123,7 @@
   width: $size
 }
 
-//endregion
-
-//region app-player-timeline
-.app-player-timeline {
+.app-player-controls__timeline {
   align-items: center;
   color: #FFFFFF;
   display: grid;

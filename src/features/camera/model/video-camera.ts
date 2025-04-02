@@ -11,11 +11,24 @@ export class VideoCamera {
   private recordedChunks: Blob[] = [];
   private stream?: MediaStream;
   private onVideoRecorded?: (blob: Blob) => void;
+  private _quality: MediaQuality = MediaQuality.MEDIUM;
 
-  constructor(public readonly quality: MediaQuality) {}
+  get quality(): MediaQuality {
+    return this._quality;
+  }
+
+  constructor(quality: MediaQuality) {
+    this._quality = quality;
+  }
 
   async turnOn(): Promise<MediaStream> {
-    return this.stream = await getMediaStream(this.quality);
+    return this.stream = await getMediaStream(this._quality);
+  }
+
+  setQuality(quality: MediaQuality): Promise<MediaStream> {
+    this.turnOff();
+    this._quality = quality;
+    return this.turnOn()
   }
 
   setOnVideoRecorded(onVideoRecorded: (blob: Blob) => void): void {
@@ -29,7 +42,8 @@ export class VideoCamera {
     this.onVideoRecorded = undefined;
 
     if (this.mediaRecorder) {
-      // todo? remove onstop
+      this.mediaRecorder.ondataavailable = null;
+      this.mediaRecorder.onstop = null;
     }
 
     this.stopRecording();

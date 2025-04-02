@@ -136,8 +136,12 @@ export class CameraComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isQualityOverlayOpen = !this.isQualityOverlayOpen;
   }
 
-  protected selectQuality(quality: MediaQuality): void {
+  protected async selectQuality(quality: MediaQuality): Promise<void> {
     this.quality = quality;
+
+    if ( this.videoElementRef?.nativeElement) {
+      this.videoElementRef.nativeElement.srcObject = await this.camera?.setQuality(quality) ?? null;
+    }
     this.isQualityOverlayOpen = false;
     // todo change video quality
   }

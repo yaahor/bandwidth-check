@@ -24,6 +24,8 @@ export class AppComponent implements OnInit {
   protected url?: string;
   protected currentTime = 0;
   protected currentPercentage = 0;
+  protected removedRecord?: VideoRecord;
+
 
   constructor(private store: Store) {
   }
@@ -61,7 +63,7 @@ export class AppComponent implements OnInit {
   }
 
   protected onRecordRemoved(record: VideoRecord): void {
-    this.store.dispatch(new RemoveVideoRecord(record));
+    this.removedRecord = record;
   }
 
   protected togglePlayback(): void {
@@ -86,6 +88,18 @@ export class AppComponent implements OnInit {
     this.currentTime = video.currentTime;
     this.currentPercentage = this.activeRecord?.durationMs ? (video.currentTime * 1000 / this.activeRecord?.durationMs) * 100 : 0;
 
+  }
+
+  protected onDialogCancel(): void {
+    this.removedRecord = undefined;
+  }
+
+  protected onDialogDelete(): void {
+    if (this.removedRecord) {
+      this.store.dispatch(new RemoveVideoRecord(this.removedRecord));
+    }
+
+    this.removedRecord = undefined;
   }
 
   private resetVideo(): void {

@@ -20,6 +20,10 @@
     &:before {
       opacity: 1;
     }
+
+    .app-record-list-item__button {
+      opacity: 1;
+    }
   }
 }
 
@@ -50,6 +54,7 @@
   border-width: 0;
   cursor: pointer;
   height: 28px;
+  opacity: 0;
   outline: 0;
   padding: 0;
   transition: transform 0.2s linear;;

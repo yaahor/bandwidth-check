@@ -73,7 +73,11 @@ export class CameraComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async ngAfterViewInit(): Promise<void> {
     if (this.videoElementRef) {
-      this.videoElementRef.nativeElement.srcObject = await this.camera?.turnOn() ?? null;
+      try {
+        this.videoElementRef.nativeElement.srcObject = await this.camera?.turnOn() ?? null;
+      } catch (error) {
+        alert('Error accessing camera');
+      }
     }
   }
 

@@ -32,7 +32,13 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     this.store.dispatch(new GetVideoRecords());
-    this.quality = getDownloadSpeedMbps().then(mapSpeedMbpsToMediaQuality);
+
+    this.quality = getDownloadSpeedMbps()
+      .then(mapSpeedMbpsToMediaQuality)
+      .catch(() => {
+        alert('Error getting download speed');
+        return MediaQuality.MEDIUM;
+      });
   }
 
   protected onCloseClick(): void {

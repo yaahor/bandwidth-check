@@ -125,10 +125,9 @@ $control-group--size: 80px;
 //region .app-camera-progress
 .app-camera-progress {
   position: relative;
-  display: none;
 
-  @media screen and (min-width: 768px) {
-    display: block;
+  @media screen and (max-width: 767.999px) {
+    display: none;
   }
 }
 
